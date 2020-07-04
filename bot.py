@@ -1,3 +1,4 @@
+import asyncio
 import os
 import random
 
@@ -64,5 +65,9 @@ async def play(ctx):
     voice_client = discord.VoiceClient = discord.utils.get(bot.voice_clients, guild=guild)
     voice_client.play(discord.FFmpegPCMAudio('shatt.mp3'))
     voice_client.source = discord.PCMVolumeTransformer(voice_client.source)
+    voice_client.source.volume = 10.0
+    while voice_client.is_playing():
+        await asyncio.sleep(1)
+    voice_client.stop()
 
 bot.run(AUTH_TOKEN)
