@@ -63,8 +63,6 @@ async def image(ctx):
 async def play(ctx):
     guild = ctx.guild
 
-    if not discord.opus.is_loaded():
-        discord.opus.load_opus('opus')
     voice_client = discord.VoiceClient = discord.utils.get(bot.voice_clients, guild=guild)
     voice_client.play(discord.FFmpegPCMAudio('shatt.mp3'))
     voice_client.source = discord.PCMVolumeTransformer(voice_client.source)
