@@ -1,3 +1,4 @@
+import os
 import random
 
 import discord
@@ -9,7 +10,7 @@ load_dotenv()
 
 bot = commands.Bot(command_prefix='/')
 
-bot.login('')
+bot.login(os.environ.get('AUTH_TOKEN'))
 
 
 @bot.command(name='join')
