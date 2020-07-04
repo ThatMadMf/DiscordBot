@@ -63,7 +63,9 @@ async def play(ctx):
     guild = ctx.guild
     voice_client = discord.VoiceClient = discord.utils.get(bot.voice_clients, guild=guild)
     audio_source = discord.FFmpegPCMAudio('shatt.mp3')
-    if not voice_client.is_playing():
-        voice_client.play(audio_source, after=None)
+    discord.opus.load_opus()
+    if not discord.opus.is_loaded():
+        raise RuntimeError('Opus failed to load')
+    voice_client.play(audio_source, after=None)
 
 bot.run(AUTH_TOKEN)
