@@ -10,7 +10,7 @@ load_dotenv()
 
 bot = commands.Bot(command_prefix='/')
 
-bot.login(os.environ.get('AUTH_TOKEN'))
+AUTH_TOKEN = os.environ.get('AUTH_TOKEN')
 
 
 @bot.command(name='join')
@@ -66,4 +66,4 @@ async def play(ctx):
     if not voice_client.is_playing():
         voice_client.play(audio_source, after=None)
 
-bot.run(TOKEN)
+bot.run(AUTH_TOKEN)
