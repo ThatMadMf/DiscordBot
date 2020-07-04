@@ -62,6 +62,9 @@ async def image(ctx):
 @bot.command(name='play', pass_context=True)
 async def play(ctx):
     guild = ctx.guild
+
+    if not discord.opus.is_loaded():
+        discord.opus.load_opus('opus')
     voice_client = discord.VoiceClient = discord.utils.get(bot.voice_clients, guild=guild)
     voice_client.play(discord.FFmpegPCMAudio('shatt.mp3'))
     voice_client.source = discord.PCMVolumeTransformer(voice_client.source)
@@ -69,5 +72,6 @@ async def play(ctx):
     while voice_client.is_playing():
         await asyncio.sleep(1)
     voice_client.stop()
+
 
 bot.run(AUTH_TOKEN)
