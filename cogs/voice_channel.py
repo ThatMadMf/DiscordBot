@@ -5,7 +5,7 @@ from discord.ext import commands
 
 
 class VoiceChannel(commands.Cog):
-    def __int__(self, bot):
+    def __init__(self, bot):
         self.bot = bot
 
     @commands.command(name='join')
@@ -14,19 +14,17 @@ class VoiceChannel(commands.Cog):
         if connected:
             await connected.channel.connect()
 
-    @commands.command(name='leave')
+    @commands.command(name='leave', pass_context=True)
     async def leave_voice(self, ctx):
-        try:
-            for x in self.bot.voice_clients:
-                return await x.disconnect()
-        except Exception:
-            return ctx.send('WTF')
+        guild = ctx.guild
+        voice_client = discord.utils.get(self.bot.voice_clients, guild=guild)
+        await voice_client.disconnect()
 
-    @commands.command(name='play')
+    @commands.command(name='play', pass_context=True)
     async def play(self, ctx):
         guild = ctx.guild
 
-        voice_client = discord.VoiceClient = discord.utils.get(self.bot.voice_clients, guild=guild)
+        voice_client = discord.utils.get(self.bot.voice_clients, guild=guild)
         voice_client.play(discord.FFmpegPCMAudio('shatt.mp3'))
         voice_client.source = discord.PCMVolumeTransformer(voice_client.source)
         voice_client.source.volume = 10.0
