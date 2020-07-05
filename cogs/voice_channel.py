@@ -4,17 +4,17 @@ import discord
 from discord.ext import commands
 
 
-class VoiceChannel(commands.cog):
+class VoiceChannel(commands.Cog):
     def __int__(self, bot):
         self.bot = bot
 
-    @commands.Cog.listener(name='join')
+    @commands.command(name='join')
     async def join_voice(self, ctx):
         connected = ctx.author.voice
         if connected:
             await connected.channel.connect()
 
-    @commands.Cog.listener(name='leave')
+    @commands.command(name='leave')
     async def leave_voice(self, ctx):
         try:
             for x in self.bot.voice_clients:
@@ -22,7 +22,7 @@ class VoiceChannel(commands.cog):
         except Exception:
             return ctx.send('WTF')
 
-    @commands.Cog.listener(name='play')
+    @commands.command(name='play')
     async def play(self, ctx):
         guild = ctx.guild
 
@@ -33,3 +33,7 @@ class VoiceChannel(commands.cog):
         while voice_client.is_playing():
             await asyncio.sleep(1)
         voice_client.stop()
+
+
+def setup(bot):
+    bot.add_cog(VoiceChannel(bot))

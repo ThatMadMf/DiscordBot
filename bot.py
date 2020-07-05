@@ -3,16 +3,18 @@ import os
 from discord.ext import commands
 from dotenv import load_dotenv
 
-from cogs.text_channel import TextChannel
-from cogs.voice_channel import VoiceChannel
-
 load_dotenv()
 
 bot = commands.Bot(command_prefix='/')
 
 AUTH_TOKEN = os.environ.get('AUTH_TOKEN')
 
-bot.add_cog(TextChannel(bot))
-bot.add_cog(VoiceChannel(bot))
+cogs = [
+    'cogs.text_channel',
+    'cogs.voice_channel'
+]
+
+for cog in cogs:
+    bot.load_extension(cog)
 
 bot.run(AUTH_TOKEN)
