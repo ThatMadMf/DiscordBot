@@ -25,13 +25,10 @@ class TextChannel(commands.Cog):
 
     @commands.command(name='image')
     async def image(self, ctx):
-        try:
-            img_urls = ['https://imgur.com/random']
-            pp = requests.get(url=random.choice(img_urls))
-            response = pp.url
-            await ctx.send(response)
-        except Exception:
-            print(Exception)
+        img_urls = ['https://imgur.com/random']
+        pp = requests.get(url=random.choice(img_urls))
+        response = pp.url
+        await ctx.send(response)
 
 
 def setup(bot):

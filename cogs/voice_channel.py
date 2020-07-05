@@ -12,16 +12,19 @@ class VoiceChannel(commands.Cog):
     async def join_voice(self, ctx):
         connected = ctx.author.voice
         if connected:
+            await ctx.message.delete()
             await connected.channel.connect()
 
     @commands.command(name='leave', pass_context=True)
     async def leave_voice(self, ctx):
         guild = ctx.guild
         voice_client = discord.utils.get(self.bot.voice_clients, guild=guild)
+        await ctx.message.delete()
         await voice_client.disconnect()
 
     @commands.command(name='play', pass_context=True)
     async def play(self, ctx):
+        await ctx.message.delete()
         guild = ctx.guild
 
         voice_client = discord.utils.get(self.bot.voice_clients, guild=guild)
