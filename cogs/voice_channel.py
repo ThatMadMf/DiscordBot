@@ -2,6 +2,7 @@ import asyncio
 
 import discord
 from discord.ext import commands
+from gtts import gTTS
 
 
 class VoiceChannel(commands.Cog):
@@ -29,6 +30,22 @@ class VoiceChannel(commands.Cog):
 
         voice_client = discord.utils.get(self.bot.voice_clients, guild=guild)
         voice_client.play(discord.FFmpegPCMAudio('shatt.mp3'))
+        voice_client.source = discord.PCMVolumeTransformer(voice_client.source)
+        voice_client.source.volume = 10.0
+        while voice_client.is_playing():
+            await asyncio.sleep(1)
+        voice_client.stop()
+
+    @commands.command(name='say', pass_context=True)
+    async def say(self, ctx, text):
+        tts = gTTS(text)
+        with open('message.mp3', 'wb') as f:
+            tts.write_to_fp(f)
+        await ctx.message.delete()
+        guild = ctx.guild
+
+        voice_client = discord.utils.get(self.bot.voice_clients, guild=guild)
+        voice_client.play(discord.FFmpegPCMAudio('message.mp3'))
         voice_client.source = discord.PCMVolumeTransformer(voice_client.source)
         voice_client.source.volume = 10.0
         while voice_client.is_playing():
