@@ -1,4 +1,5 @@
 import asyncio
+import random
 
 import discord
 from discord.ext import commands
@@ -11,16 +12,20 @@ class VoiceChannel(commands.Cog):
 
     @commands.command(name='join')
     async def join_voice(self, ctx):
+        greetings = ['hi guys', 'hello', 'whats popping', 'whats up']
         connected = ctx.author.voice
         if connected:
             await ctx.message.delete()
             await connected.channel.connect()
+            await ctx.invoke(self.bot.get_command('say'), random.choice(greetings))
 
     @commands.command(name='leave', pass_context=True)
     async def leave_voice(self, ctx):
+        farewells = ['good by', 'farewell', 'see you']
         guild = ctx.guild
         voice_client = discord.utils.get(self.bot.voice_clients, guild=guild)
         await ctx.message.delete()
+        await ctx.invoke(self.bot.get_command('say'), random.choice(farewells))
         await voice_client.disconnect()
 
     @commands.command(name='play', pass_context=True)
@@ -41,7 +46,10 @@ class VoiceChannel(commands.Cog):
         tts = gTTS(text)
         with open('message.mp3', 'wb') as f:
             tts.write_to_fp(f)
-        await ctx.message.delete()
+        try:
+            await ctx.message.delete()
+        except discord.NotFound:
+            print('Nothing to delete')
         guild = ctx.guild
 
         voice_client = discord.utils.get(self.bot.voice_clients, guild=guild)
