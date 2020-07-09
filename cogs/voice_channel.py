@@ -52,6 +52,8 @@ class VoiceChannel(commands.Cog):
     @commands.command(name='play', aliases=['p'], pass_context=True)
     async def play(self, ctx, url):
 
+        await ctx.message.delete()
+
         url = url.split('&')[0]
 
         if os.path.isfile('temp.mp3'):
@@ -80,7 +82,7 @@ class VoiceChannel(commands.Cog):
         voice_client = discord.utils.get(self.bot.voice_clients, guild=guild)
         voice_client.play(discord.FFmpegPCMAudio('temp.mp3'))
         voice_client.source = discord.PCMVolumeTransformer(voice_client.source)
-        voice_client.source.volume = 10.0
+        voice_client.source.volume = 5.0
         while voice_client.is_playing():
             await asyncio.sleep(1)
         voice_client.stop()
