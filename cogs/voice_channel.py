@@ -11,6 +11,7 @@ from gtts import gTTS
 class VoiceChannel(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.volume = 0.5
 
     @commands.command(name='join')
     async def join_voice(self, ctx):
@@ -44,7 +45,7 @@ class VoiceChannel(commands.Cog):
         voice_client = discord.utils.get(self.bot.voice_clients, guild=guild)
         voice_client.play(discord.FFmpegPCMAudio('reserved_files/message.mp3'))
         voice_client.source = discord.PCMVolumeTransformer(voice_client.source)
-        voice_client.source.volume = 10.0
+        voice_client.source.volume = self.volume
         while voice_client.is_playing():
             await asyncio.sleep(1)
         voice_client.stop()
@@ -82,10 +83,26 @@ class VoiceChannel(commands.Cog):
         voice_client = discord.utils.get(self.bot.voice_clients, guild=guild)
         voice_client.play(discord.FFmpegPCMAudio('temp.mp3'))
         voice_client.source = discord.PCMVolumeTransformer(voice_client.source)
-        voice_client.source.volume = 5.0
+        voice_client.source.volume = self.volume
         while voice_client.is_playing():
             await asyncio.sleep(1)
         voice_client.stop()
+
+    @commands.command(name='volume', pass_context=True)
+    @commands.has_permissions(administrator=True)
+    async def volume(self, ctx, volume):
+        await ctx.message.delete()
+        try:
+            volume = int(volume)
+        except ValueError:
+            return
+
+        if not 0 < volume <= 100:
+            return
+        self.volume = volume / 100
+        response = await ctx.send(f'Volume set to {volume}')
+        await asyncio.sleep(10)
+        await response.delete()
 
 
 def setup(bot):

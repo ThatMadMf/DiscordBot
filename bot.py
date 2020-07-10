@@ -11,7 +11,8 @@ AUTH_TOKEN = os.environ.get('AUTH_TOKEN')
 
 cogs = [
     'cogs.text_channel',
-    'cogs.voice_channel'
+    'cogs.voice_channel',
+    'cogs.games'
 ]
 
 for cog in cogs:
