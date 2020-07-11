@@ -57,26 +57,20 @@ class VoiceChannel(commands.Cog):
 
         url = url.split('&')[0]
 
-        if os.path.isfile('temp.mp3'):
-            os.remove('temp.mp3')
-
         ydl_opts = {
             'format': 'bestaudio/best',
             'quiet': True,
-            'outtmpl': '%(title)s.%(ext)s',
+            'outtmpl': 'temp.%(ext)s',
             'postprocessors': [{
                 'key': 'FFmpegExtractAudio',
                 'preferredcodec': 'mp3',
                 'preferredquality': '192',
             }],
+
         }
 
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             audio = ydl.extract_info(url=url, download=True)
-
-        for file in os.listdir('./'):
-            if file.endswith('.mp3'):
-                os.rename(file, 'temp.mp3')
 
         guild = ctx.guild
 
