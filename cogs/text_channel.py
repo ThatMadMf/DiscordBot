@@ -1,8 +1,13 @@
+import asyncio
+import json
+import os
 import random
 
 import requests
 from googletrans import Translator
 from discord.ext import commands
+
+IMAGE_SECRET = os.environ.get('KSOFT_SECRET')
 
 
 class TextChannel(commands.Cog):
@@ -24,12 +29,15 @@ class TextChannel(commands.Cog):
         response = f'You got {random.randint(1, 6)} , sir'
         await ctx.send(response)
 
-    @commands.command(name='image')
+    @commands.command(name='image', aliases=['i'])
     async def image(self, ctx):
-        img_urls = ['https://imgur.com/random']
-        pp = requests.get(url=random.choice(img_urls))
-        response = pp.url
-        await ctx.send(response)
+        await ctx.message.delete()
+        img_urls = ['https://api.ksoft.si/images/random-meme', 'https://api.ksoft.si/images/rand-reddit/dankmemes']
+        pp = requests.get(url=random.choice(img_urls), headers={'Authorization': f'Bearer {IMAGE_SECRET}'})
+        url = json.loads(pp.text).get('image_url')
+        response = await ctx.send(url)
+        await asyncio.sleep(60)
+        await response.delete()
 
     @commands.command(name='translate',  aliases=['t', 'tr'],
                       description='Translates text in format [lang] [text] e.g: ru "text to translate"')
